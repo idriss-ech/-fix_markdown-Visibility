@@ -554,11 +554,11 @@ class ParserConfigurationForm extends FormBase implements FilterAwareInterface, 
         if (!isset($defaultValue) && isset($allowedHtmlPlugins[$plugin_id])) {
           $defaultValue = $allowedHtmlPlugins[$plugin_id];
         }
-        if (!isset($defaultValue)) {
+         if (!isset($defaultValue)) {
           if ($type === 'filter' && ($filter = $this->getFilter()) && $filter instanceof FilterFormatAwareInterface && ($format = $filter->getFilterFormat())) {
             $definition = $allowedHtml->getPluginDefinition();
             $filterId = isset($definition['requiresFilter']) ? $definition['requiresFilter'] : $plugin_id;
-            $defaultValue = $format->filters()->has($filterId) ? !!$format->filters($filterId)->status : FALSE;
+            $defaultValue = $format->filters()->has($filterId) ? !!$format->filters($filterId) : FALSE; 
           }
           elseif ($type === 'extension' && $parser instanceof ExtensibleParserInterface && ($parser->extensions()->has($plugin_id))) {
             $defaultValue = $parser->extension($plugin_id)->isEnabled();
@@ -568,6 +568,7 @@ class ParserConfigurationForm extends FormBase implements FilterAwareInterface, 
           }
         }
       }
+
 
       $renderStrategySubform['plugins'][$type][$plugin_id] = [
         '#type' => 'checkbox',
@@ -736,7 +737,7 @@ class ParserConfigurationForm extends FormBase implements FilterAwareInterface, 
       if ($parser instanceof ExtensibleParserInterface && !empty($subform['parser']['extensions'])) {
         foreach ($parser->extensions() as $extensionId => $extension) {
           if ($extension instanceof SettingsInterface && $extension instanceof PluginFormInterface && isset($subform['parser']['extensions'][$extensionId]['settings'])) {
-            $parser->submitConfigurationForm($subform['parser']['extensions'][$extensionId]['settings'], SubformState::createForSubform($subform['parser']['extensions'][$extensionId]['settings'], $subform, $subformState));
+            $extension->submitConfigurationForm($subform['parser']['extensions'][$extensionId]['settings'], SubformState::createForSubform($subform['parser']['extensions'][$extensionId]['settings'], $subform, $subformState));
           }
         }
       }
