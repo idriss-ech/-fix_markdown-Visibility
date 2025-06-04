@@ -16,6 +16,7 @@ use Drupal\Core\Form\FormStateInterface;
 class SubformState extends FormStateDecoratorBase implements SubformStateInterface {
 
   use FormStateValuesTrait;
+
   /**
    * The parent form.
    *
